@@ -23,8 +23,8 @@ public class MainActivity extends FragmentActivity {
 
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 12;
     private FusedLocationProviderClient mFusedLocationProviderClient;
-    //Somewhere in Australia
-    private final LatLng mDestinationLatLng = new LatLng(-33.8523341, 151.2106085);
+    private final LatLng mDestinationLatLng = new LatLng(43.0753, -89.4042);
+    private LatLng mCurrentLatLng;
     private GoogleMap mMap;
 
     @Override
@@ -60,12 +60,17 @@ public class MainActivity extends FragmentActivity {
                             mMap.addPolyline(new PolylineOptions().add(
                                     new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude()),
                                         mDestinationLatLng));
+                            mCurrentLatLng = new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude());
+                            mMap.addMarker(new MarkerOptions()
+                                    .position(mCurrentLatLng)
+                                    .title("Current"));
                         }
             });
         }
     }
 
-    public void onRequestPermissionResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if(requestCode == PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION) {
             //if request is cancelled, the results arrays are empty
             if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
